@@ -22,13 +22,13 @@ public class HelloController {
     }
 
     // Handles request of the form hello/?name=LaunchCode
-    @RequestMapping(method={RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(method={RequestMethod.GET, RequestMethod.POST}, value="hello")
     public String helloWithQueryParam(@RequestParam String name){
         return "Hello, " + name + "!";
     }
 
     // Handles requests of the form hello/LaunchCode
-    @GetMapping("{name}")
+    @GetMapping("hello/{name}")
     public String helloWithPathParam(@PathVariable String name){
         return "Hello, " + name + "!";
     }
@@ -37,7 +37,7 @@ public class HelloController {
     public String helloForm(){
         return "<html>" +
                     "<body>" +
-                        "<form action='hello'>" + //submit request to /hello
+                        "<form action='hello'>" + //submit request to /hello/hello
                             "<input type='text' name='name'>" +
                              "<input type='submit' value='Greet me!'>" +
                         "</form>" +
@@ -49,12 +49,49 @@ public class HelloController {
     public String helloForm2(){
         return "<html>" +
                     "<body>" +
-                        "<form action='hello' method='post'>" + //submit request to /hello
+                        "<form action='hello' method='post'>" + //submit request to /hello/hello
                             "<input type='text' name='name'>" +
                             "<input type='submit' value='Greet me!'>" +
                         "</form>" +
                     "</body>" +
                 "</html>";
     }
+
+    @GetMapping("exerciseForm")
+    public String greetingForm(){
+        return "<html>" +
+                    "<body>" +
+                        "<form action='helloInChosenLanguage' method='post'>" + //submit request to /hello/exerciseForm
+                            "<input type='text' name='name'>" +
+                            "<select name='language'>" +
+                                "<option value='english'>English</option>" +
+                                "<option value='french'>French</option>" +
+                                "<option value='spanish'>Spanish</option>" +
+                                "<option value='arabic'>Arabic</option>" +
+                                "<option value='japanese'>Japanese</option>" +
+                            "</select>"+
+                            "<input type='submit' value='Greet me!'>" +
+                        "</form>" +
+                    "</body>" +
+                "</html>";
+    }
+
+    @PostMapping("helloInChosenLanguage")
+    public static String createMessage(@RequestParam String language, @RequestParam String name){
+        String hello = "";
+        if(language.equals("english")){
+            hello = "Hello, ";
+        } else if (language.equals("french")){
+            hello = "Bonjour, ";
+        } else if (language.equals("spanish")){
+            hello = "Hola, ";
+        } else if (language.equals("arabic")){
+            hello = "Marhaba ";
+        } else if (language.equals("japanese")){
+            hello = "Konnichiwa ";
+        }
+        return hello + name;
+    }
+
 
 }
